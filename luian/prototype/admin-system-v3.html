@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统管理员后台 - 品牌维权保护平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            width: 240px;
+            background: #001529;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            padding: 24px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+        
+        .menu-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .menu-item.active {
+            background: #1890ff;
+        }
+        
+        .menu-item i {
+            width: 20px;
+        }
+        
+        .menu-item .arrow {
+            margin-left: auto;
+            transition: transform 0.3s;
+        }
+        
+        .menu-item.expanded .arrow {
+            transform: rotate(90deg);
+        }
+        
+        .submenu {
+            display: none;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .submenu.show {
+            display: block;
+        }
+        
+        .submenu-item {
+            padding: 10px 24px 10px 56px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .submenu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* 主内容区 */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* 顶部栏 */
+        .header {
+            background: white;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1890ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        /* 内容区 */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #262626;
+        }
+        
+        .stat-trend {
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .stat-trend.up {
+            color: #52c41a;
+        }
+        
+        .stat-trend.down {
+            color: #f5222d;
+        }
+        
+        /* 快捷操作 */
+        .quick-actions {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .action-card {
+            padding: 20px;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-card:hover {
+            border-color: #1890ff;
+            box-shadow: 0 4px 12px rgba(24,144,255,0.2);
+        }
+        
+        .action-icon {
+            font-size: 32px;
+            color: #1890ff;
+            margin-bottom: 12px;
+        }
+        
+        .action-label {
+            font-size: 14px;
+            color: #262626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                系统管理后台
+            </div>
+            
+            <div class="menu">
+                <div class="menu-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>工作台</span>
+                </div>
+
+                <div class="menu-item" data-submenu="user">
+                    <i class="fas fa-users"></i>
+                    <span>用户管理</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu" id="submenu-user">
+                    <div class="submenu-item" onclick="location.href='admin-system-user-list-list.html'">用户列表</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-user-audit-list.html'">用户审核</div>
+                </div>
+                
+                <div class="menu-item" data-submenu="role">
+                    <i class="fas fa-user-shield"></i>
+                    <span>角色权限</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu" id="submenu-role">
+                    <div class="submenu-item" onclick="location.href='admin-system-role-list-list.html'">角色列表</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-permission-list.html'">权限管理</div>
+                </div>
+                
+                <div class="menu-item" data-submenu="exam">
+                    <i class="fas fa-file-alt"></i>
+                    <span>考试管理</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu" id="submenu-exam">
+                    <div class="submenu-item" onclick="location.href='admin-system-exam-list-list.html'">考试列表</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-question-bank-list.html'">题库管理</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-exam-scope-list.html'">考试范围</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-exam-result-list.html'">考试成绩</div>
+                </div>
+                
+                <div class="menu-item" data-submenu="training">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>培训学习</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu" id="submenu-training">
+                    <div class="submenu-item" onclick="location.href='admin-system-training-material-list.html'">学习材料</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-training-video-list.html'">视频课程</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-training-progress-list.html'">学习进度</div>
+                </div>
+                
+                <div class="menu-item" data-submenu="log">
+                    <i class="fas fa-history"></i>
+                    <span>审计日志</span>
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+                <div class="submenu" id="submenu-log">
+                    <div class="submenu-item" onclick="location.href='admin-system-log-list-list.html'">操作日志</div>
+                    <div class="submenu-item" onclick="location.href='admin-system-login-log-list.html'">登录日志</div>
+                </div>
+                
+                <div class="menu-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>系统设置</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main">
+            <!-- 顶部栏 -->
+            <div class="header">
+                <div class="header-left">
+                    <h2>系统管理工作台</h2>
+                </div>
+                <div class="header-right">
+                    <div style="cursor: pointer;">
+                        <i class="fas fa-bell"></i>
+                        <span style="margin-left: 4px;">通知</span>
+                    </div>
+                    <div class="user-info">
+                        <div class="avatar">管</div>
+                        <span>系统管理员</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区 -->
+            <div class="content">
+                <div class="page-title">欢迎回来，系统管理员</div>
+                
+                <!-- 统计卡片 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">总用户数</div>
+                        <div class="stat-value">12,458</div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i> 较上月 +8.5%
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">在线用户</div>
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i> 较昨日 +12%
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">待审核用户</div>
+                        <div class="stat-value">45</div>
+                        <div class="stat-trend down">
+                            <i class="fas fa-arrow-down"></i> 较昨日 -5
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">系统告警</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-trend">
+                            需要处理
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 快捷操作 -->
+                <div class="quick-actions">
+                    <div class="section-title">快捷操作</div>
+                    <div class="action-grid">
+                        <div class="action-card" onclick="location.href='admin-system-user-list-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="action-label">添加用户</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-role-list-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="action-label">角色管理</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-exam-list-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="action-label">创建考试</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-training-material-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="action-label">上传学习材料</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-training-video-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="action-label">上传视频课程</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-question-bank-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="action-label">题库管理</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='admin-system-log-list-list.html'">
+                            <div class="action-icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div class="action-label">查看日志</div>
+                        </div>
+                        <div class="action-card" onclick="location.href='#'">
+                            <div class="action-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="action-label">系统设置</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 菜单展开/收起
+        document.querySelectorAll('.menu-item[data-submenu]').forEach(item => {
+            item.addEventListener('click', function() {
+                const submenuId = 'submenu-' + this.dataset.submenu;
+                const submenu = document.getElementById(submenuId);
+                
+                // 切换展开状态
+                this.classList.toggle('expanded');
+                submenu.classList.toggle('show');
+            });
+        });
+        
+        // 单页菜单点击
+        document.querySelectorAll('.menu-item[data-page]').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

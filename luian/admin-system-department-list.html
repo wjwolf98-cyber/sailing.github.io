@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部门管理 - 系统管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+            padding: 24px;
+        }
+        .page-header {
+            background: #fff;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .page-header h1 { font-size: 20px; margin-bottom: 8px; }
+        .breadcrumb { color: #8c8c8c; font-size: 14px; }
+        .breadcrumb i { margin: 0 8px; font-size: 12px; }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary { background: #1890ff; color: #fff; }
+        .btn-primary:hover { background: #40a9ff; }
+        .tree-container {
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+            padding: 16px;
+        }
+        .tree-node {
+            padding: 8px 0;
+        }
+        .tree-node-content {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tree-node-content:hover {
+            background: #f5f5f5;
+        }
+        .tree-node-icon {
+            margin-right: 8px;
+            color: #8c8c8c;
+            cursor: pointer;
+        }
+        .tree-node-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .tree-node-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tree-node-content:hover .tree-node-actions {
+            opacity: 1;
+        }
+        .tree-children {
+            margin-left: 24px;
+        }
+        .btn-icon {
+            padding: 4px 8px;
+            background: none;
+            border: none;
+            color: #1890ff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-icon:hover { color: #40a9ff; }
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>部门管理</h1>
+        <div class="breadcrumb">
+            <span>系统管理</span>
+            <i class="fas fa-chevron-right"></i>
+            <span>部门管理</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="toolbar">
+            <h3>组织架构</h3>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                新增部门
+            </button>
+        </div>
+
+        <div class="tree-container">
+            <!-- 根节点 -->
+            <div class="tree-node">
+                <div class="tree-node-content">
+                    <i class="fas fa-chevron-down tree-node-icon"></i>
+                    <div class="tree-node-label">
+                        <i class="fas fa-building" style="color: #1890ff;"></i>
+                        <strong>律联品牌保护公司</strong>
+                        <span class="badge">156人</span>
+                    </div>
+                    <div class="tree-node-actions">
+                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                    </div>
+                </div>
+
+                <!-- 一级部门 -->
+                <div class="tree-children">
+                    <div class="tree-node">
+                        <div class="tree-node-content">
+                            <i class="fas fa-chevron-down tree-node-icon"></i>
+                            <div class="tree-node-label">
+                                <i class="fas fa-sitemap" style="color: #52c41a;"></i>
+                                <span>总部</span>
+                                <span class="badge">98人</span>
+                            </div>
+                            <div class="tree-node-actions">
+                                <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- 二级部门 -->
+                        <div class="tree-children">
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>技术部</span>
+                                        <span class="badge">15人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>品牌部</span>
+                                        <span class="badge">28人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>巡查部</span>
+                                        <span class="badge">35人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>督导部</span>
+                                        <span class="badge">12人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>专家部</span>
+                                        <span class="badge">8人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tree-node">
+                        <div class="tree-node-content">
+                            <i class="fas fa-chevron-down tree-node-icon"></i>
+                            <div class="tree-node-label">
+                                <i class="fas fa-sitemap" style="color: #52c41a;"></i>
+                                <span>分公司</span>
+                                <span class="badge">58人</span>
+                            </div>
+                            <div class="tree-node-actions">
+                                <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="tree-children">
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>华北区</span>
+                                        <span class="badge">18人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>华东区</span>
+                                        <span class="badge">22人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tree-node">
+                                <div class="tree-node-content">
+                                    <i class="fas fa-chevron-right tree-node-icon"></i>
+                                    <div class="tree-node-label">
+                                        <i class="fas fa-users" style="color: #faad14;"></i>
+                                        <span>华南区</span>
+                                        <span class="badge">18人</span>
+                                    </div>
+                                    <div class="tree-node-actions">
+                                        <button class="btn-icon" title="新增子部门"><i class="fas fa-plus"></i></button>
+                                        <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 树节点展开/收起
+        document.querySelectorAll('.tree-node-icon').forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const node = this.closest('.tree-node');
+                const children = node.querySelector('.tree-children');
+                if (children) {
+                    if (this.classList.contains('fa-chevron-down')) {
+                        this.classList.remove('fa-chevron-down');
+                        this.classList.add('fa-chevron-right');
+                        children.style.display = 'none';
+                    } else {
+                        this.classList.remove('fa-chevron-right');
+                        this.classList.add('fa-chevron-down');
+                        children.style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

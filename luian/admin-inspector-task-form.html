@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巡查任务表单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+:root {
+    --primary-color: #1890ff;
+    --success-color: #52c41a;
+    --warning-color: #faad14;
+    --error-color: #f5222d;
+    --text-color: #262626;
+    --text-secondary: #8c8c8c;
+    --border-color: #d9d9d9;
+    --bg-color: #f0f2f5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5715;
+}
+.header {
+    background: white;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-title { font-size: 20px; font-weight: 600; }
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+.breadcrumb a { color: var(--primary-color); text-decoration: none; }
+.content { padding: 24px; max-width: 1600px; margin: 0 auto; }
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.stat-value { font-size: 28px; font-weight: 600; color: var(--primary-color); }
+.stat-label { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+.toolbar {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-box { display: flex; gap: 12px; flex-wrap: wrap; }
+.search-input, .search-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+.search-input { width: 240px; }
+.search-select { width: 160px; }
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+.btn:hover { opacity: 0.8; }
+.btn-primary { background: var(--primary-color); color: white; }
+.btn-success { background: var(--success-color); color: white; }
+.btn-default { background: white; color: var(--text-color); border: 1px solid var(--border-color); }
+.table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+    background: #fafafa;
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+tr:hover { background: #fafafa; }
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.status-success { background: #f6ffed; color: var(--success-color); }
+.status-warning { background: #fff7e6; color: var(--warning-color); }
+.status-error { background: #fff1f0; color: var(--error-color); }
+.status-default { background: #fafafa; color: var(--text-secondary); }
+.action-btns { display: flex; gap: 12px; }
+.btn-link {
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+}
+.btn-link:hover { text-decoration: underline; }
+.btn-link.danger { color: var(--error-color); }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+}
+.page-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.page-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.page-btn:hover:not(.active) { border-color: var(--primary-color); color: var(--primary-color); }
+.form-container {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+}
+.form-section { margin-bottom: 32px; }
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+.form-row.full { grid-template-columns: 1fr; }
+.form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.form-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+.form-label.required::before {
+    content: '*';
+    color: var(--error-color);
+    margin-right: 4px;
+}
+.form-input, .form-select, .form-textarea {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid #f0f0f0;
+}
+.upload-area {
+    border: 1px dashed var(--border-color);
+    border-radius: 4px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.upload-area:hover { border-color: var(--primary-color); background: #fafafa; }
+.upload-icon {
+    font-size: 48px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+.upload-text { font-size: 14px; color: var(--text-color); }
+.upload-hint { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+</style>
+</head>
+<body>
+
+    <div class="back-button-container" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <a href="prototype/admin-inspector-v3.html" class="back-button" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #1890ff; color: white; text-decoration: none; border-radius: 8px; box-shadow: 0 2px 8px rgba(24,144,255,0.3); transition: all 0.3s; font-size: 14px; font-weight: 500;">
+            <i class="fas fa-arrow-left"></i>
+            <span>返回巡查部后台</span>
+        </a>
+    </div>
+    <style>
+        .back-button:hover {
+            background: #40a9ff !important;
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(24,144,255,0.4) !important;
+        }
+    </style>
+
+    <div class="header">
+        <div>
+            <div class="header-title">巡查任务表单</div>
+            <div class="breadcrumb">
+                <a href="admin-inspector.html">巡查部/巡查员</a>
+                <span>/</span>
+                <span>任务管理</span>
+                <span>/</span>
+                <a href="admin-inspector-task-list.html">列表</a>
+                <span>/</span>
+                <span>新建/编辑</span>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="form-container">
+            <form onsubmit="handleSubmit(event)">
+                
+                <div class="form-section">
+                    <div class="section-title">基本信息</div>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">任务编号</label>
+                            <input type="text" class="form-input" placeholder="请输入任务编号" required>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">任务名称</label>
+                            <input type="text" class="form-input" placeholder="请输入任务名称" required>
+                        </div></div><div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">任务类型</label>
+                            <select class="form-select" required>
+                            <option>请选择任务类型</option>
+                            <option>常规巡查</option><option>专项检查</option><option>投诉核查</option><option>突击检查</option>
+                        </select>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">所属品牌</label>
+                            <select class="form-select" required>
+                            <option>请选择所属品牌</option>
+                            <option>品牌A</option><option>品牌B</option><option>品牌C</option>
+                        </select>
+                        </div></div><div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">巡查区域</label>
+                            <input type="text" class="form-input" placeholder="请输入巡查区域" required>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">指派巡查员</label>
+                            <select class="form-select" required>
+                            <option>请选择指派巡查员</option>
+                            <option>巡查员A</option><option>巡查员B</option><option>巡查员C</option>
+                        </select>
+                        </div></div><div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">优先级</label>
+                            <select class="form-select" required>
+                            <option>请选择优先级</option>
+                            <option>紧急</option><option>重要</option><option>普通</option>
+                        </select>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">状态</label>
+                            <select class="form-select" required>
+                            <option>请选择状态</option>
+                            <option>待执行</option><option>执行中</option><option>已完成</option>
+                        </select>
+                        </div></div>
+                </div>
+                <div class="form-section">
+                    <div class="section-title">详细信息</div>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">开始时间</label>
+                            <input type="datetime-local" class="form-input" required>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">截止时间</label>
+                            <input type="datetime-local" class="form-input" required>
+                        </div></div><div class="form-row full">
+                        <div class="form-item">
+                            <label class="form-label">任务要求</label>
+                            <textarea class="form-textarea" placeholder="请输入任务要求" ></textarea>
+                        </div></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-default" onclick="history.back()">
+                        <i class="fas fa-times"></i>
+                        取消
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i>
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('表单提交成功！\n\n实际应用中会保存数据并返回列表页面。');
+            // window.location.href = 'admin-inspector-task-list.html';
+        }
+    </script>
+</body>
+</html>

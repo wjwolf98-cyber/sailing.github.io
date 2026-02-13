@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试列表 - 系统管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+            padding: 24px;
+        }
+        .page-header {
+            background: #fff;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .page-header h1 { font-size: 20px; margin-bottom: 8px; }
+        .breadcrumb { color: #8c8c8c; font-size: 14px; }
+        .breadcrumb i { margin: 0 8px; font-size: 12px; }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-bar input { min-width: 200px; }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary { background: #1890ff; color: #fff; }
+        .btn-primary:hover { background: #40a9ff; }
+        .btn-default { background: #fff; color: #595959; border: 1px solid #d9d9d9; }
+        .btn-default:hover { color: #1890ff; border-color: #1890ff; }
+        .table-container { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        th {
+            background: #fafafa;
+            font-weight: 600;
+            color: #262626;
+        }
+        tr:hover { background: #fafafa; }
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .badge-success { background: #f6ffed; color: #52c41a; }
+        .badge-warning { background: #fffbe6; color: #faad14; }
+        .badge-danger { background: #fff1f0; color: #ff4d4f; }
+        .badge-info { background: #e6f7ff; color: #1890ff; }
+        .btn-icon {
+            padding: 4px 8px;
+            background: none;
+            border: none;
+            color: #1890ff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-icon:hover { color: #40a9ff; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+        .pagination button {
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .pagination button:hover { color: #1890ff; border-color: #1890ff; }
+        .pagination button.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>考试列表</h1>
+        <div class="breadcrumb">
+            <span>系统管理</span>
+            <i class="fas fa-chevron-right"></i>
+            <span>考试管理</span>
+            <i class="fas fa-chevron-right"></i>
+            <span>考试列表</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="toolbar">
+            <div class="search-bar">
+                <input type="text" placeholder="搜索考试名称...">
+                <select>
+                    <option value="">全部类型</option>
+                    <option value="entry">入职考试</option>
+                    <option value="training">培训考试</option>
+                    <option value="qualification">资格考试</option>
+                    <option value="annual">年度考核</option>
+                </select>
+                <select>
+                    <option value="">全部状态</option>
+                    <option value="draft">草稿</option>
+                    <option value="published">已发布</option>
+                    <option value="ongoing">进行中</option>
+                    <option value="finished">已结束</option>
+                </select>
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    搜索
+                </button>
+                <button class="btn btn-default">
+                    <i class="fas fa-redo"></i>
+                    重置
+                </button>
+            </div>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                新增考试
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>考试编号</th>
+                        <th>考试名称</th>
+                        <th>考试类型</th>
+                        <th>考试范围</th>
+                        <th>题目数量</th>
+                        <th>考试时长</th>
+                        <th>及格分数</th>
+                        <th>参考人数</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>EXAM20260211001</td>
+                        <td><strong>品牌保护法律知识考试</strong></td>
+                        <td><span class="badge badge-info">培训考试</span></td>
+                        <td>全体员工</td>
+                        <td>50题</td>
+                        <td>90分钟</td>
+                        <td>60分</td>
+                        <td>156人</td>
+                        <td>2026-02-15 09:00</td>
+                        <td>2026-02-15 18:00</td>
+                        <td><span class="badge badge-warning">已发布</span></td>
+                        <td>
+                            <button class="btn-icon" title="查看"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon" title="成绩"><i class="fas fa-chart-bar"></i></button>
+                            <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>EXAM20260210002</td>
+                        <td><strong>巡查员资格考试</strong></td>
+                        <td><span class="badge badge-info">资格考试</span></td>
+                        <td>巡查部</td>
+                        <td>80题</td>
+                        <td>120分钟</td>
+                        <td>70分</td>
+                        <td>35人</td>
+                        <td>2026-02-10 09:00</td>
+                        <td>2026-02-10 18:00</td>
+                        <td><span class="badge badge-success">已结束</span></td>
+                        <td>
+                            <button class="btn-icon" title="查看"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon" title="成绩"><i class="fas fa-chart-bar"></i></button>
+                            <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>EXAM20260208003</td>
+                        <td><strong>律师执业能力考核</strong></td>
+                        <td><span class="badge badge-info">年度考核</span></td>
+                        <td>督导部</td>
+                        <td>100题</td>
+                        <td>150分钟</td>
+                        <td>75分</td>
+                        <td>25人</td>
+                        <td>2026-02-08 09:00</td>
+                        <td>2026-02-08 18:00</td>
+                        <td><span class="badge badge-success">已结束</span></td>
+                        <td>
+                            <button class="btn-icon" title="查看"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon" title="成绩"><i class="fas fa-chart-bar"></i></button>
+                            <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>EXAM20260205004</td>
+                        <td><strong>新员工入职考试</strong></td>
+                        <td><span class="badge badge-info">入职考试</span></td>
+                        <td>全体新员工</td>
+                        <td>30题</td>
+                        <td>60分钟</td>
+                        <td>60分</td>
+                        <td>12人</td>
+                        <td>2026-02-05 14:00</td>
+                        <td>2026-02-05 16:00</td>
+                        <td><span class="badge badge-success">已结束</span></td>
+                        <td>
+                            <button class="btn-icon" title="查看"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon" title="成绩"><i class="fas fa-chart-bar"></i></button>
+                            <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>EXAM20260220005</td>
+                        <td><strong>专家鉴定能力测试</strong></td>
+                        <td><span class="badge badge-info">资格考试</span></td>
+                        <td>专家部</td>
+                        <td>60题</td>
+                        <td>100分钟</td>
+                        <td>80分</td>
+                        <td>0人</td>
+                        <td>2026-02-20 09:00</td>
+                        <td>2026-02-20 18:00</td>
+                        <td><span class="badge badge-danger">草稿</span></td>
+                        <td>
+                            <button class="btn-icon" title="查看"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon" title="编辑"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon" title="发布"><i class="fas fa-paper-plane"></i></button>
+                            <button class="btn-icon" title="删除"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button>上一页</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>下一页</button>
+            <span style="margin-left: 16px; color: #8c8c8c;">共 45 条</span>
+        </div>
+    </div>
+</body>
+</html>

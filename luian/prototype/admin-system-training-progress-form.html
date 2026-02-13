@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习进度表单 - 系统管理后台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+        }
+        .header {
+            background: white;
+            padding: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .header-title { font-size: 20px; font-weight: 600; }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-top: 4px;
+        }
+        .content {
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+        }
+        .form-section { margin-bottom: 32px; }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .form-row.full { grid-template-columns: 1fr; }
+        .form-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-label.required::before {
+            content: '*';
+            color: #f5222d;
+            margin-right: 4px;
+        }
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .btn {
+            padding: 10px 32px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .btn-primary { background: #1890ff; color: white; }
+        .btn-default {
+            background: white;
+            color: #262626;
+            border: 1px solid #d9d9d9;
+        }
+        .btn:hover { opacity: 0.8; }
+        .upload-area {
+            border: 1px dashed #d9d9d9;
+            border-radius: 4px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover { border-color: #1890ff; }
+        .upload-icon {
+            font-size: 48px;
+            color: #8c8c8c;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">学习进度表单</div>
+        <div class="breadcrumb">
+            <a href="pc-system.html" style="color: #1890ff; text-decoration: none;">首页</a>
+            <span>/</span>
+            <span>培训学习</span>
+            <span>/</span>
+            <a href="admin-system-training-progress-list.html" style="color: #1890ff; text-decoration: none;">学习进度</a>
+            <span>/</span>
+            <span>新建/编辑</span>
+        </div>
+    </div>
+    <div class="content">
+        <div class="form-container">
+            <form>
+                <div class="form-section">
+                    <div class="section-title">基本信息</div>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label class="form-label required">名称</label>
+                            <input type="text" class="form-input" placeholder="请输入名称">
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label required">类型</label>
+                            <select class="form-select">
+                                <option>请选择类型</option>
+                                <option>类型1</option>
+                                <option>类型2</option>
+                                <option>类型3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-item">
+                            <label class="form-label">描述</label>
+                            <textarea class="form-textarea" placeholder="请输入描述"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <div class="section-title">附件上传</div>
+                    <div class="form-row full">
+                        <div class="form-item">
+                            <label class="form-label">相关文件</label>
+                            <div class="upload-area">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div>点击或拖拽文件到此处上传</div>
+                                <div style="font-size: 12px; color: #8c8c8c; margin-top: 8px;">
+                                    支持 PDF、Word、Excel、图片、视频等格式
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-default" onclick="history.back()">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('表单提交成功！\n\n实际应用中会保存数据并返回列表页面。');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>投诉详情 - 律联品牌保护系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-color: #1890ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --error-color: #ff4d4f;
+            --text-color: rgba(0, 0, 0, 0.85);
+            --text-secondary: rgba(0, 0, 0, 0.45);
+            --border-color: #d9d9d9;
+            --background-color: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5715;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            height: 44px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .header-right {
+            color: var(--primary-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 0 16px 80px;
+        }
+
+        .status-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .status-banner.processing {
+            background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%);
+        }
+
+        .status-banner.completed {
+            background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+        }
+
+        .status-banner.rejected {
+            background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+        }
+
+        .banner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .banner-no {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .banner-status {
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            font-size: 12px;
+        }
+
+        .banner-info {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 12px;
+        }
+
+        .info-label {
+            min-width: 80px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .info-value {
+            flex: 1;
+            color: var(--text-color);
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .evidence-item {
+            aspect-ratio: 1;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .evidence-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -19px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 14px;
+            width: 2px;
+            height: calc(100% - 4px);
+            background: #e8e8e8;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 操作按钮 */
+        .action-buttons {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 12px 16px;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-default {
+            background: #f5f5f5;
+            color: var(--text-color);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 手机框样式 */
+        @media (min-width: 769px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                padding: 20px;
+                background: #1a1a1a;
+            }
+
+            .phone-frame {
+                width: 375px;
+                height: 812px;
+                background: #000;
+                border-radius: 40px;
+                padding: 12px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .phone-frame::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 150px;
+                height: 30px;
+                background: #000;
+                border-radius: 0 0 20px 20px;
+                z-index: 1001;
+            }
+
+            .phone-screen {
+                width: 100%;
+                height: 100%;
+                background: white;
+                border-radius: 32px;
+                overflow: hidden;
+                position: relative;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .phone-frame {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .phone-screen {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .phone-frame {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 70px;
+        }
+    </style>
+    <link rel="stylesheet" href="mobile-frame.css">
+</head>
+<body>
+<a href="complaint-list.html" class="back-button">← 返回列表</a>
+<div class="phone-frame">
+    <div class="app-content">
+        <div class="header">
+            <div class="header-left" onclick="window.location.href='complaint-list.html'">
+                <i class="fas fa-arrow-left"></i>
+                <span>投诉详情</span>
+            </div>
+            <div class="header-right" onclick="shareComplaint()">
+                <i class="fas fa-share-alt"></i> 分享
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- 状态横幅 -->
+            <div class="status-banner processing">
+                <div class="banner-header">
+                    <div class="banner-no">RP20240211000001</div>
+                    <div class="banner-status">处理中</div>
+                </div>
+                <div class="banner-info">
+                    <div>📅 提交时间: 2024-02-11 10:30</div>
+                    <div>⏱️ 预计处理: 7个工作日内</div>
+                    <div>👤 处理人: 张律师</div>
+                </div>
+            </div>
+
+            <!-- 基础信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-user"></i>
+                    基础信息
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">申请人</div>
+                        <div class="info-value">张三</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">联系电话</div>
+                        <div class="info-value">138****5678</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">电子邮箱</div>
+                        <div class="info-value">example@email.com</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">身份证号</div>
+                        <div class="info-value">110101********1234</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-shopping-bag"></i>
+                    商品信息
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">投诉类型</div>
+                        <div class="info-value">
+                            <span style="padding: 2px 8px; background: #e6f7ff; color: var(--primary-color); border-radius: 4px; font-size: 11px;">线上网购</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">商品名称</div>
+                        <div class="info-value">耐克运动鞋</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">品牌名称</div>
+                        <div class="info-value">Nike</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">商品型号</div>
+                        <div class="info-value">Air Max 270</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">购买平台</div>
+                        <div class="info-value">淘宝</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">店铺名称</div>
+                        <div class="info-value">XX运动专营店</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">订单号</div>
+                        <div class="info-value">202401150001234567</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">购买时间</div>
+                        <div class="info-value">2024-01-15</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">购买价格</div>
+                        <div class="info-value" style="color: var(--error-color); font-weight: 600;">¥899.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题描述 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    问题描述
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">问题类型</div>
+                        <div class="info-value">
+                            <span style="padding: 2px 8px; background: #fff1f0; color: var(--error-color); border-radius: 4px; font-size: 11px; margin-right: 4px;">假冒伪劣</span>
+                            <span style="padding: 2px 8px; background: #fff7e6; color: var(--warning-color); border-radius: 4px; font-size: 11px;">质量问题</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">详细描述</div>
+                        <div class="info-value">
+                            购买的商品疑似假货,具体表现在以下几个方面:<br>
+                            1. Logo印刷模糊不清<br>
+                            2. 鞋底材质与正品不同<br>
+                            3. 包装盒做工粗糙<br>
+                            4. 鞋垫没有防伪标识<br>
+                            5. 价格明显低于市场价
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">发现时间</div>
+                        <div class="info-value">2024-01-20</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">联系商家</div>
+                        <div class="info-value">是</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">商家回复</div>
+                        <div class="info-value">联系商家后,商家拒不承认是假货,态度恶劣,拒绝退货退款</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 证据材料 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-image"></i>
+                    证据材料
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">商品照片 (6张)</div>
+                    <div class="evidence-grid">
+                        <div class="evidence-item" onclick="viewImage('product1.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('product2.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('product3.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('product4.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('product5.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('product6.jpg')">
+                            <i class="fas fa-image" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">购买凭证 (2张)</div>
+                    <div class="evidence-grid">
+                        <div class="evidence-item" onclick="viewImage('receipt1.jpg')">
+                            <i class="fas fa-receipt" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('receipt2.jpg')">
+                            <i class="fas fa-receipt" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">聊天记录 (3张)</div>
+                    <div class="evidence-grid">
+                        <div class="evidence-item" onclick="viewImage('chat1.jpg')">
+                            <i class="fas fa-comments" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('chat2.jpg')">
+                            <i class="fas fa-comments" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                        <div class="evidence-item" onclick="viewImage('chat3.jpg')">
+                            <i class="fas fa-comments" style="font-size: 32px; color: var(--text-secondary);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 诉求说明 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-gavel"></i>
+                    诉求说明
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">诉求类型</div>
+                        <div class="info-value">退货退款</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">诉求金额</div>
+                        <div class="info-value" style="color: var(--error-color); font-weight: 600;">¥899.00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">详细说明</div>
+                        <div class="info-value">要求商家退货退款,并赔偿因购买假货造成的损失</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">处理方式</div>
+                        <div class="info-value">法律诉讼</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 处理进度 -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    处理进度
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">2024-02-11 14:30</div>
+                        <div class="timeline-content">
+                            <strong>律师已接单</strong><br>
+                            张律师已接受您的维权申请,正在审核相关材料
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">2024-02-11 11:00</div>
+                        <div class="timeline-content">
+                            <strong>系统自动分配</strong><br>
+                            系统已将您的申请分配给专业律师团队
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">2024-02-11 10:30</div>
+                        <div class="timeline-content">
+                            <strong>提交成功</strong><br>
+                            您的维权申请已提交成功,维权编号: RP20240211000001
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="action-buttons">
+        <button class="btn btn-default" onclick="contactLawyer()">
+            <i class="fas fa-phone"></i> 联系律师
+        </button>
+        <button class="btn btn-primary" onclick="uploadMoreEvidence()">
+            <i class="fas fa-upload"></i> 补充证据
+        </button>
+    </div>
+</div>
+
+<script>
+    function shareComplaint() {
+        alert('分享投诉详情');
+    }
+
+    function viewImage(imageName) {
+        alert('查看图片: ' + imageName);
+    }
+
+    function contactLawyer() {
+        alert('联系律师: 张律师\n电话: 138****1234');
+    }
+
+    function uploadMoreEvidence() {
+        alert('补充证据材料');
+    }
+</script>
+</body>
+</html>

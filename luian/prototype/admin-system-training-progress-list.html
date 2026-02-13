@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习进度 - 系统管理后台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+        }
+        .header {
+            background: white;
+            padding: 16px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title { font-size: 20px; font-weight: 600; }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-top: 4px;
+        }
+        .content { padding: 24px; }
+        .toolbar {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-box { display: flex; gap: 12px; }
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            width: 300px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary { background: #1890ff; color: white; }
+        .btn-default {
+            background: white;
+            color: #262626;
+            border: 1px solid #d9d9d9;
+        }
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: #fafafa;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        tr:hover { background: #fafafa; }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-success { background: #f6ffed; color: #52c41a; }
+        .status-warning { background: #fff7e6; color: #faad14; }
+        .status-error { background: #fff1f0; color: #f5222d; }
+        .action-btns { display: flex; gap: 8px; }
+        .btn-link {
+            color: #1890ff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-link:hover { text-decoration: underline; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .page-btn.active {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <div class="header-title">学习进度</div>
+            <div class="breadcrumb">
+                <a href="admin-system-v3.html" style="color: #1890ff; text-decoration: none;">首页</a>
+                <span>/</span>
+                <span>培训学习</span>
+                <span>/</span>
+                <span>学习进度</span>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="location.href='admin-system-training-progress-form.html'">
+            <i class="fas fa-plus"></i>
+            新建
+        </button>
+    </div>
+    <div class="content">
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="搜索...">
+                <button class="btn btn-default">
+                    <i class="fas fa-search"></i>
+                    搜索
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-default">
+                    <i class="fas fa-filter"></i>
+                    筛选
+                </button>
+                <button class="btn btn-default">
+                    <i class="fas fa-download"></i>
+                    导出
+                </button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox"></th>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#001</td>
+                        <td>示例数据1</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-11 10:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=1" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#002</td>
+                        <td>示例数据2</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-12 11:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=2" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#003</td>
+                        <td>示例数据3</td>
+                        <td><span class="status-badge status-warning">待审核</span></td>
+                        <td>2024-02-13 12:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=3" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#004</td>
+                        <td>示例数据4</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-14 13:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=4" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#005</td>
+                        <td>示例数据5</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-15 14:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=5" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#006</td>
+                        <td>示例数据6</td>
+                        <td><span class="status-badge status-warning">待审核</span></td>
+                        <td>2024-02-16 15:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=6" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#007</td>
+                        <td>示例数据7</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-17 16:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=7" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#008</td>
+                        <td>示例数据8</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-18 17:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=8" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#009</td>
+                        <td>示例数据9</td>
+                        <td><span class="status-badge status-warning">待审核</span></td>
+                        <td>2024-02-19 18:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=9" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>#010</td>
+                        <td>示例数据10</td>
+                        <td><span class="status-badge status-success">正常</span></td>
+                        <td>2024-02-20 19:30</td>
+                        <td class="action-btns">
+                            <a href="admin-system-training-progress-form.html?id=10" class="btn-link">编辑</a>
+                            <a href="#" class="btn-link">查看</a>
+                            <a href="#" class="btn-link" style="color: #f5222d;">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button class="page-btn">上一页</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">下一页</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

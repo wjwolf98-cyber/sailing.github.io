@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消费者投诉举报 - 律联品牌保护系统v3.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #8c8c8c;
+            font-size: 14px;
+        }
+
+        .ai-chatbot {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .chatbot-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .chatbot-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .chatbot-info h3 {
+            font-size: 18px;
+            color: #262626;
+            margin-bottom: 4px;
+        }
+
+        .chatbot-info p {
+            font-size: 13px;
+            color: #52c41a;
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+            background: #f0f2f5;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .chat-message.user .message-content {
+            background: #e6f7ff;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section h3 {
+            font-size: 18px;
+            color: #262626;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: #f5222d;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .upload-area {
+            border: 2px dashed #d9d9d9;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #1890ff;
+            background: #f0f5ff;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #1890ff;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: #8c8c8c;
+        }
+
+        .upload-limit {
+            font-size: 12px;
+            color: #8c8c8c;
+            margin-top: 8px;
+        }
+
+        .security-info {
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .security-info h4 {
+            font-size: 14px;
+            color: #262626;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-info p {
+            font-size: 13px;
+            color: #8c8c8c;
+            line-height: 1.6;
+        }
+
+        .feature-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .feature-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f6ffed;
+            color: #52c41a;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(24, 144, 255, 0.3);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            color: #262626;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+
+        .back-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index-v3.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>返回首页</span>
+        </a>
+
+        <div class="header">
+            <h1>🛡️ 消费者投诉举报</h1>
+            <p>我们将在48小时内给予初步响应，全程保护您的合法权益</p>
+        </div>
+
+        <!-- AI智能客服 -->
+        <div class="ai-chatbot">
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-info">
+                    <h3>AI智能客服</h3>
+                    <p>● 在线 | 响应时间 ≤3秒</p>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <div class="chat-message">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=ai" alt="AI" class="message-avatar">
+                    <div class="message-content">
+                        您好！我是AI智能客服，很高兴为您服务。请问您遇到了什么问题？我可以帮您：<br>
+                        1️⃣ 指导投诉流程<br>
+                        2️⃣ 解答常见问题<br>
+                        3️⃣ 提供证据采集建议<br>
+                        4️⃣ 查询投诉进度
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" placeholder="输入您的问题...">
+                <button>发送</button>
+            </div>
+        </div>
+
+        <!-- 投诉表单 -->
+        <div class="form-card">
+            <div class="security-info">
+                <h4>
+                    <i class="fas fa-shield-check"></i>
+                    安全保障
+                </h4>
+                <p>
+                    您的投诉信息将通过<strong>国密SM2算法加密</strong>存储，证据将<strong>秒级上链至区块链</strong>，确保数据安全和法律效力。
+                    系统符合GB/HNL 001-2026、ISO/IEC 27037标准。
+                </p>
+                <div class="feature-badges">
+                    <span class="feature-badge">
+                        <i class="fas fa-lock"></i>
+                        国密SM2加密
+                    </span>
+                    <span class="feature-badge">
+                        <i class="fas fa-cube"></i>
+                        区块链存证
+                    </span>
+                    <span class="feature-badge">
+                        <i class="fas fa-user-check"></i>
+                        人脸识别认证
+                    </span>
+                    <span class="feature-badge">
+                        <i class="fas fa-clock"></i>
+                        48小时响应
+                    </span>
+                </div>
+            </div>
+
+            <form>
+                <!-- 基本信息 -->
+                <div class="form-section">
+                    <h3>
+                        <i class="fas fa-user"></i>
+                        基本信息
+                    </h3>
+                    <div class="form-group">
+                        <label>姓名 <span class="required">*</span></label>
+                        <input type="text" placeholder="请输入您的真实姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系电话 <span class="required">*</span></label>
+                        <input type="tel" placeholder="请输入您的手机号码" required>
+                    </div>
+                    <div class="form-group">
+                        <label>电子邮箱</label>
+                        <input type="email" placeholder="请输入您的邮箱地址">
+                    </div>
+                    <div class="form-group">
+                        <label>身份认证 <span class="required">*</span></label>
+                        <button type="button" style="padding: 12px 24px; background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            <i class="fas fa-camera"></i>
+                            人脸识别认证（准确率≥99%）
+                        </button>
+                        <p style="font-size: 12px; color: #8c8c8c; margin-top: 8px;">
+                            支持身份证/护照/驾驶证验证
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 投诉信息 -->
+                <div class="form-section">
+                    <h3>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        投诉信息
+                    </h3>
+                    <div class="form-group">
+                        <label>维权类型 <span class="required">*</span></label>
+                        <select required>
+                            <option value="">请选择维权类型</option>
+                            <optgroup label="假冒伪劣">
+                                <option>商标侵权</option>
+                                <option>材质造假</option>
+                                <option>产地造假</option>
+                                <option>品牌仿冒</option>
+                                <option>包装仿冒</option>
+                            </optgroup>
+                            <optgroup label="质量问题">
+                                <option>功能缺陷</option>
+                                <option>材质问题</option>
+                                <option>工艺问题</option>
+                                <option>安全隐患</option>
+                                <option>不符合标准</option>
+                            </optgroup>
+                            <optgroup label="虚假宣传">
+                                <option>虚假描述</option>
+                                <option>夸大宣传</option>
+                                <option>效果虚假</option>
+                                <option>参数虚假</option>
+                                <option>产地虚假</option>
+                            </optgroup>
+                            <optgroup label="服务纠纷">
+                                <option>服务态度</option>
+                                <option>物流问题</option>
+                                <option>售后问题</option>
+                                <option>退换货问题</option>
+                                <option>延迟发货</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>问题描述 <span class="required">*</span> (至少50字)</label>
+                        <textarea placeholder="请详细描述您遇到的问题，包括时间、地点、商品信息等..." required></textarea>
+                        <p style="font-size: 12px; color: #8c8c8c; margin-top: 8px;">
+                            已输入 0 字 / 至少 50 字
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <label>购买渠道</label>
+                        <select>
+                            <option value="">请选择购买渠道</option>
+                            <option>线下专卖店</option>
+                            <option>线下经销商</option>
+                            <option>电商平台</option>
+                            <option>社交电商</option>
+                            <option>直播电商</option>
+                            <option>其他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 证据上传 -->
+                <div class="form-section">
+                    <h3>
+                        <i class="fas fa-camera"></i>
+                        证据上传
+                    </h3>
+                    <div class="form-group">
+                        <label>上传图片/视频 <span class="required">*</span></label>
+                        <div class="upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                点击或拖拽文件到此区域上传
+                            </div>
+                            <div class="upload-limit">
+                                支持图片（JPG/PNG）≤15MB，视频（MP4）≤20MB<br>
+                                证据将自动加密并上链存证
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: #fff7e6; border-left: 4px solid #faad14; padding: 16px; border-radius: 8px; margin-top: 16px;">
+                        <h4 style="font-size: 14px; color: #262626; margin-bottom: 8px;">
+                            <i class="fas fa-lightbulb"></i>
+                            证据采集建议
+                        </h4>
+                        <ul style="font-size: 13px; color: #8c8c8c; line-height: 1.8; padding-left: 20px;">
+                            <li>拍摄商品全景、细节、标签、包装</li>
+                            <li>保留购买凭证、发票、聊天记录</li>
+                            <li>记录商家信息、店铺地址</li>
+                            <li>如有质量问题，拍摄缺陷部位</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    提交投诉（生成唯一编号CR+日期+8位随机码）
+                </button>
+
+                <p style="text-align: center; font-size: 12px; color: #8c8c8c; margin-top: 16px;">
+                    提交后将自动生成投诉编号，您可以随时查询处理进度
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 模拟AI客服响应
+        document.querySelector('.chat-input button').addEventListener('click', function() {
+            const input = document.querySelector('.chat-input input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // 添加用户消息
+            const chatMessages = document.querySelector('.chat-messages');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.innerHTML = `
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" alt="用户" class="message-avatar">
+                <div class="message-content">${message}</div>
+            `;
+            chatMessages.appendChild(userMsg);
+
+            // 清空输入框
+            input.value = '';
+
+            // 模拟AI响应（≤3秒）
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message';
+                aiMsg.innerHTML = `
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=ai" alt="AI" class="message-avatar">
+                    <div class="message-content">
+                        我已经收到您的问题。根据您的描述，建议您：<br>
+                        1. 准备好商品照片和购买凭证<br>
+                        2. 详细描述问题（至少50字）<br>
+                        3. 完成人脸识别实名认证<br>
+                        4. 提交后将在48小时内收到响应
+                    </div>
+                `;
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        });
+
+        // 表单提交
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 生成投诉编号
+            const date = new Date().toISOString().slice(0,10).replace(/-/g,'');
+            const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const complaintNo = `CR${date}${random}`;
+            
+            alert(`✅ 投诉提交成功！\n\n投诉编号：${complaintNo}\n\n您的投诉已通过国密SM2算法加密存储，证据已秒级上链至区块链。\n\n我们将在48小时内给予初步响应，请保存好投诉编号以便查询进度。`);
+        });
+    </script>
+</body>
+</html>

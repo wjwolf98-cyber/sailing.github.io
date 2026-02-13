@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术选型方案</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1890ff;
+            border-bottom: 3px solid #1890ff;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 40px;
+            border-left: 4px solid #1890ff;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        h4 {
+            color: #555;
+            margin-top: 20px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            line-height: 1.45;
+        }
+        code {
+            background-color: #f6f8fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        ul, ol {
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #1890ff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        strong {
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>技术选型方案</h1>
+
+        <h2>1. 技术选型原则</h2>
+        
+        <h3>1.1 选型标准</h3>
+        <ul>
+            <li><strong>成熟稳定</strong>: 经过大规模生产验证</li>
+            <li><strong>社区活跃</strong>: 持续维护和更新</li>
+            <li><strong>性能优异</strong>: 满足高并发需求</li>
+            <li><strong>易于扩展</strong>: 支持水平扩展</li>
+            <li><strong>团队熟悉</strong>: 降低学习成本</li>
+            <li><strong>生态完善</strong>: 周边工具丰富</li>
+        </ul>
+
+        <h3>1.2 阿里系优先</h3>
+        <ul>
+            <li>充分利用阿里云生态</li>
+            <li>Spring Cloud Alibaba</li>
+            <li>阿里开源中间件</li>
+            <li>降低运维成本</li>
+        </ul>
+
+        <h2>2. 后端技术栈</h2>
+        
+        <h3>2.1 开发语言</h3>
+        <div class="highlight">
+            <p><strong>Java 17 LTS</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>LTS长期支持版本</li>
+                <li>性能提升（ZGC、G1优化）</li>
+                <li>新特性（Records、Pattern Matching、Sealed Classes）</li>
+                <li>生态成熟，人才充足</li>
+                <li>阿里系技术栈标配</li>
+            </ul>
+        </div>
+        <p><strong>备选</strong>: Kotlin (部分模块)</p>
+        <ul>
+            <li>简洁语法</li>
+            <li>空安全</li>
+            <li>协程支持</li>
+        </ul>
+
+        <h3>2.2 核心框架</h3>
+        <div class="highlight">
+            <p><strong>Spring Boot 3.2+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>快速开发</li>
+                <li>自动配置</li>
+                <li>生产就绪</li>
+                <li>社区活跃</li>
+                <li>与Spring Cloud无缝集成</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <p><strong>Spring Cloud Alibaba 2023.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里生产实践</li>
+                <li>与阿里云深度集成</li>
+                <li>中文文档完善</li>
+                <li>性能优异</li>
+            </ul>
+        </div>
+
+        <p><strong>核心组件</strong>:</p>
+        <pre>Nacos         - 服务注册与配置中心
+Sentinel      - 流量控制与熔断降级
+Seata         - 分布式事务
+RocketMQ      - 消息队列
+Dubbo         - RPC框架</pre>
+
+        <h3>2.3 数据访问</h3>
+        <div class="highlight">
+            <p><strong>MyBatis Plus 3.5+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>增强MyBatis功能</li>
+                <li>代码生成器</li>
+                <li>分页插件</li>
+                <li>性能分析</li>
+                <li>国内主流选择</li>
+            </ul>
+        </div>
+
+        <p><strong>Spring Data JPA</strong></p>
+        <ul>
+            <li><strong>备选方案</strong>: 简单CRUD场景</li>
+            <li>快速开发</li>
+            <li>对象关系映射</li>
+        </ul>
+
+        <p><strong>MongoDB Driver 5.0+</strong></p>
+        <ul>
+            <li>官方驱动</li>
+            <li>异步支持</li>
+            <li>响应式编程</li>
+        </ul>
+
+        <h3>2.4 API开发</h3>
+        <p><strong>Spring Web MVC</strong></p>
+        <ul>
+            <li>RESTful API</li>
+            <li>注解驱动</li>
+            <li>异常处理</li>
+            <li>参数校验</li>
+        </ul>
+
+        <p><strong>Swagger/OpenAPI 3.0</strong></p>
+        <ul>
+            <li>API文档自动生成</li>
+            <li>在线调试</li>
+            <li>代码生成</li>
+        </ul>
+
+        <p><strong>Knife4j</strong></p>
+        <ul>
+            <li>Swagger增强</li>
+            <li>更好的UI</li>
+            <li>权限控制</li>
+        </ul>
+
+        <h3>2.5 安全框架</h3>
+        <div class="highlight">
+            <p><strong>Spring Security 6.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>功能全面</li>
+                <li>与Spring深度集成</li>
+                <li>OAuth 2.0支持</li>
+                <li>灵活可扩展</li>
+            </ul>
+        </div>
+
+        <p><strong>Sa-Token</strong></p>
+        <ul>
+            <li><strong>备选方案</strong>: 轻量级权限框架</li>
+            <li>简单易用</li>
+            <li>多端支持</li>
+            <li>国产框架</li>
+        </ul>
+
+        <p><strong>JWT (jjwt 0.12+)</strong></p>
+        <ul>
+            <li>无状态认证</li>
+            <li>跨域支持</li>
+            <li>移动端友好</li>
+        </ul>
+
+        <h3>2.6 工具库</h3>
+        <p><strong>Lombok</strong></p>
+        <ul>
+            <li>简化代码</li>
+            <li>减少样板代码</li>
+            <li>提高开发效率</li>
+        </ul>
+
+        <p><strong>MapStruct</strong></p>
+        <ul>
+            <li>对象映射</li>
+            <li>编译期生成</li>
+            <li>性能优异</li>
+        </ul>
+
+        <p><strong>Hutool 5.8+</strong></p>
+        <ul>
+            <li>国产工具库</li>
+            <li>功能全面</li>
+            <li>中文文档</li>
+        </ul>
+
+        <p><strong>Guava</strong></p>
+        <ul>
+            <li>Google工具库</li>
+            <li>集合增强</li>
+            <li>缓存工具</li>
+        </ul>
+
+        <p><strong>Apache Commons</strong></p>
+        <ul>
+            <li>Lang3: 字符串、数组工具</li>
+            <li>Collections4: 集合工具</li>
+            <li>IO: 文件操作</li>
+        </ul>
+
+        <h2>3. 前端技术栈</h2>
+
+        <h3>3.1 开发语言</h3>
+        <div class="highlight">
+            <p><strong>TypeScript 5.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>类型安全</li>
+                <li>IDE支持好</li>
+                <li>大型项目必备</li>
+                <li>社区主流</li>
+            </ul>
+        </div>
+
+        <h3>3.2 UI框架</h3>
+        <div class="highlight">
+            <p><strong>React 18+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>生态最丰富</li>
+                <li>性能优异</li>
+                <li>Hooks简化开发</li>
+                <li>并发渲染</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <p><strong>Ant Design 5.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里出品</li>
+                <li>企业级UI组件</li>
+                <li>设计规范完善</li>
+                <li>中文文档</li>
+            </ul>
+        </div>
+
+        <p><strong>Ant Design Pro 6.x</strong></p>
+        <ul>
+            <li>开箱即用</li>
+            <li>最佳实践</li>
+            <li>完整方案</li>
+        </ul>
+
+        <h3>3.3 状态管理</h3>
+        <div class="highlight">
+            <p><strong>Redux Toolkit</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>官方推荐</li>
+                <li>简化Redux</li>
+                <li>内置最佳实践</li>
+                <li>TypeScript支持</li>
+            </ul>
+        </div>
+
+        <p><strong>Zustand</strong></p>
+        <ul>
+            <li><strong>备选方案</strong>: 轻量级状态管理</li>
+            <li>简单易用</li>
+            <li>性能好</li>
+        </ul>
+
+        <h3>3.4 路由</h3>
+        <p><strong>React Router 6.x</strong></p>
+        <ul>
+            <li>官方路由</li>
+            <li>声明式路由</li>
+            <li>嵌套路由</li>
+            <li>懒加载</li>
+        </ul>
+
+        <h3>3.5 HTTP客户端</h3>
+        <p><strong>Axios</strong></p>
+        <ul>
+            <li>拦截器</li>
+            <li>请求取消</li>
+            <li>自动转换</li>
+            <li>浏览器兼容</li>
+        </ul>
+
+        <p><strong>SWR / React Query</strong></p>
+        <ul>
+            <li>数据获取</li>
+            <li>缓存管理</li>
+            <li>自动重试</li>
+        </ul>
+
+        <h3>3.6 构建工具</h3>
+        <div class="highlight">
+            <p><strong>Vite 5.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>极速启动</li>
+                <li>HMR快</li>
+                <li>开箱即用</li>
+                <li>现代化</li>
+            </ul>
+        </div>
+
+        <p><strong>Webpack 5.x</strong></p>
+        <ul>
+            <li><strong>备选方案</strong>: 复杂配置场景</li>
+            <li>生态成熟</li>
+            <li>插件丰富</li>
+        </ul>
+
+        <h3>3.7 代码质量</h3>
+        <p><strong>ESLint</strong></p>
+        <ul>
+            <li>代码检查</li>
+            <li>规范统一</li>
+        </ul>
+
+        <p><strong>Prettier</strong></p>
+        <ul>
+            <li>代码格式化</li>
+            <li>风格统一</li>
+        </ul>
+
+        <p><strong>Husky + lint-staged</strong></p>
+        <ul>
+            <li>Git Hooks</li>
+            <li>提交前检查</li>
+        </ul>
+
+        <h3>3.8 测试框架</h3>
+        <p><strong>Jest</strong></p>
+        <ul>
+            <li>单元测试</li>
+            <li>快照测试</li>
+        </ul>
+
+        <p><strong>React Testing Library</strong></p>
+        <ul>
+            <li>组件测试</li>
+            <li>用户行为测试</li>
+        </ul>
+
+        <p><strong>Cypress</strong></p>
+        <ul>
+            <li>E2E测试</li>
+            <li>可视化调试</li>
+        </ul>
+
+        <h2>4. 移动端技术栈</h2>
+
+        <h3>4.1 跨平台方案</h3>
+        <div class="highlight">
+            <p><strong>React Native 0.73+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>代码复用（与Web共享）</li>
+                <li>性能接近原生</li>
+                <li>社区活跃</li>
+                <li>热更新</li>
+            </ul>
+        </div>
+
+        <p><strong>Flutter 3.16+</strong></p>
+        <ul>
+            <li><strong>备选方案</strong>: 高性能要求场景</li>
+            <li>性能优异</li>
+            <li>UI一致性好</li>
+            <li>Google支持</li>
+        </ul>
+
+        <h3>4.2 状态管理</h3>
+        <ul>
+            <li><strong>React Native</strong>: Redux Toolkit</li>
+            <li><strong>Flutter</strong>: GetX / Provider</li>
+        </ul>
+
+        <h3>4.3 导航</h3>
+        <ul>
+            <li><strong>React Native</strong>: React Navigation</li>
+            <li><strong>Flutter</strong>: Go Router</li>
+        </ul>
+
+        <h3>4.4 网络请求</h3>
+        <ul>
+            <li><strong>React Native</strong>: Axios</li>
+            <li><strong>Flutter</strong>: Dio</li>
+        </ul>
+
+        <h3>4.5 本地存储</h3>
+        <ul>
+            <li><strong>React Native</strong>: AsyncStorage / MMKV</li>
+            <li><strong>Flutter</strong>: SharedPreferences / Hive</li>
+        </ul>
+
+        <h2>5. 数据库技术栈</h2>
+
+        <h3>5.1 关系型数据库</h3>
+        <div class="highlight">
+            <p><strong>MySQL 8.0+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>成熟稳定</li>
+                <li>性能优异</li>
+                <li>生态完善</li>
+                <li>阿里云RDS支持</li>
+            </ul>
+        </div>
+
+        <p><strong>配置</strong>:</p>
+        <ul>
+            <li>InnoDB引擎</li>
+            <li>UTF8MB4字符集</li>
+            <li>主从复制</li>
+            <li>读写分离</li>
+        </ul>
+
+        <p><strong>分库分表</strong>: ShardingSphere 5.x</p>
+        <ul>
+            <li>水平分片</li>
+            <li>垂直分片</li>
+            <li>分布式事务</li>
+            <li>读写分离</li>
+        </ul>
+
+        <h3>5.2 文档型数据库</h3>
+        <div class="highlight">
+            <p><strong>MongoDB 5.0+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>灵活Schema</li>
+                <li>高性能</li>
+                <li>水平扩展</li>
+                <li>适合非结构化数据</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>日志存储</li>
+            <li>报告文档</li>
+            <li>大字段数据</li>
+        </ul>
+
+        <h3>5.3 缓存数据库</h3>
+        <div class="highlight">
+            <p><strong>Redis 7.2+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>高性能</li>
+                <li>数据结构丰富</li>
+                <li>持久化</li>
+                <li>集群支持</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>热点数据缓存</li>
+            <li>会话存储</li>
+            <li>分布式锁</li>
+            <li>消息队列（轻量级）</li>
+            <li>计数器</li>
+        </ul>
+
+        <p><strong>部署模式</strong>:</p>
+        <ul>
+            <li>主从复制</li>
+            <li>哨兵模式</li>
+            <li>集群模式</li>
+        </ul>
+
+        <h3>5.4 搜索引擎</h3>
+        <div class="highlight">
+            <p><strong>Elasticsearch 8.11+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>全文搜索</li>
+                <li>实时分析</li>
+                <li>水平扩展</li>
+                <li>ELK生态</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>商品搜索</li>
+            <li>案件搜索</li>
+            <li>日志分析</li>
+            <li>数据统计</li>
+        </ul>
+
+        <h2>6. 中间件技术栈</h2>
+
+        <h3>6.1 服务注册与配置</h3>
+        <div class="highlight">
+            <p><strong>Nacos 2.3+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里开源</li>
+                <li>服务注册</li>
+                <li>配置管理</li>
+                <li>动态DNS</li>
+                <li>控制台完善</li>
+            </ul>
+        </div>
+
+        <p><strong>部署模式</strong>: 集群模式（3节点+）</p>
+
+        <h3>6.2 API网关</h3>
+        <div class="highlight">
+            <p><strong>Spring Cloud Gateway 4.x</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>响应式编程</li>
+                <li>性能优异</li>
+                <li>与Spring Cloud集成</li>
+                <li>灵活路由</li>
+            </ul>
+        </div>
+
+        <p><strong>功能</strong>:</p>
+        <ul>
+            <li>路由转发</li>
+            <li>限流熔断</li>
+            <li>认证鉴权</li>
+            <li>日志记录</li>
+            <li>灰度发布</li>
+        </ul>
+
+        <h3>6.3 流量控制</h3>
+        <div class="highlight">
+            <p><strong>Sentinel 1.8+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里开源</li>
+                <li>实时监控</li>
+                <li>规则动态配置</li>
+                <li>多种限流策略</li>
+                <li>控制台完善</li>
+            </ul>
+        </div>
+
+        <p><strong>功能</strong>:</p>
+        <ul>
+            <li>流量控制</li>
+            <li>熔断降级</li>
+            <li>系统保护</li>
+            <li>热点参数限流</li>
+        </ul>
+
+        <h3>6.4 分布式事务</h3>
+        <div class="highlight">
+            <p><strong>Seata 2.0+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里开源</li>
+                <li>多种模式</li>
+                <li>性能优异</li>
+                <li>易于集成</li>
+            </ul>
+        </div>
+
+        <p><strong>模式</strong>:</p>
+        <ul>
+            <li>AT模式: 自动补偿（推荐）</li>
+            <li>TCC模式: 手动补偿</li>
+            <li>SAGA模式: 长事务</li>
+            <li>XA模式: 强一致性</li>
+        </ul>
+
+        <h3>6.5 消息队列</h3>
+        <div class="highlight">
+            <p><strong>RocketMQ 5.1+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里开源</li>
+                <li>高性能</li>
+                <li>高可用</li>
+                <li>事务消息</li>
+                <li>顺序消息</li>
+                <li>延时消息</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>异步解耦</li>
+            <li>削峰填谷</li>
+            <li>事件驱动</li>
+            <li>日志收集</li>
+        </ul>
+
+        <p><strong>部署模式</strong>: 集群模式（主从）</p>
+
+        <h3>6.6 任务调度</h3>
+        <div class="highlight">
+            <p><strong>XXL-Job 2.4+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>国产开源</li>
+                <li>分布式调度</li>
+                <li>可视化管理</li>
+                <li>任务依赖</li>
+                <li>失败重试</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>定时任务</li>
+            <li>数据同步</li>
+            <li>报表生成</li>
+            <li>数据清理</li>
+        </ul>
+
+        <h3>6.7 RPC框架</h3>
+        <div class="highlight">
+            <p><strong>Dubbo 3.2+</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>阿里开源</li>
+                <li>高性能</li>
+                <li>服务治理</li>
+                <li>多协议支持</li>
+            </ul>
+        </div>
+
+        <p><strong>使用场景</strong>:</p>
+        <ul>
+            <li>内部服务调用</li>
+            <li>高性能要求</li>
+            <li>服务治理</li>
+        </ul>
+
+        <h2>7. 云服务技术栈</h2>
+
+        <h3>7.1 云平台</h3>
+        <div class="highlight">
+            <p><strong>阿里云</strong></p>
+            <p><strong>选型理由</strong>:</p>
+            <ul>
+                <li>国内领先</li>
+                <li>生态完善</li>
+                <li>技术支持好</li>
+                <li>合规认证</li>
+            </ul>
+        </div>
+
+        <h3>7.2 计算服务</h3>
+        <p><strong>ECS (云服务器)</strong></p>
+        <ul>
+            <li>应用部署</li>
+            <li>数据库部署</li>
+        </ul>
+
+        <p><strong>ACK (容器服务)</strong></p>
+        <ul>
+            <li>Kubernetes托管</li>
+            <li>自动运维</li>
+            <li>弹性伸缩</li>
+        </ul>
+
+        <p><strong>Serverless (函数计算)</strong></p>
+        <ul>
+            <li>事件驱动</li>
+            <li>按需付费</li>
+            <li>自动扩展</li>
+        </ul>
+
+        <h3>7.3 存储服务</h3>
+        <p><strong>OSS (对象存储)</strong></p>
+        <ul>
+            <li>文件存储</li>
+            <li>图片视频</li>
+            <li>静态资源</li>
+            <li>CDN加速</li>
+        </ul>
+
+        <p><strong>NAS (文件存储)</strong></p>
+        <ul>
+            <li>共享文件</li>
+            <li>持久化存储</li>
+        </ul>
+
+        <h3>7.4 数据库服务</h3>
+        <p><strong>RDS (关系型数据库)</strong></p>
+        <ul>
+            <li>MySQL托管</li>
+            <li>自动备份</li>
+            <li>读写分离</li>
+            <li>高可用</li>
+        </ul>
+
+        <p><strong>MongoDB (文档数据库)</strong></p>
+        <ul>
+            <li>MongoDB托管</li>
+            <li>自动备份</li>
+            <li>副本集</li>
+        </ul>
+
+        <p><strong>Redis (缓存数据库)</strong></p>
+        <ul>
+            <li>Redis托管</li>
+            <li>主从复制</li>
+            <li>集群模式</li>
+        </ul>
+
+        <h3>7.5 网络服务</h3>
+        <p><strong>SLB (负载均衡)</strong></p>
+        <ul>
+            <li>流量分发</li>
+            <li>健康检查</li>
+            <li>SSL卸载</li>
+        </ul>
+
+        <p><strong>VPC (专有网络)</strong></p>
+        <ul>
+            <li>网络隔离</li>
+            <li>安全组</li>
+            <li>路由表</li>
+        </ul>
+
+        <p><strong>CDN (内容分发)</strong></p>
+        <ul>
+            <li>静态加速</li>
+            <li>动态加速</li>
+            <li>全球节点</li>
+        </ul>
+
+        <h3>7.6 安全服务</h3>
+        <p><strong>WAF (Web应用防火墙)</strong></p>
+        <ul>
+            <li>SQL注入防护</li>
+            <li>XSS防护</li>
+            <li>CC攻击防护</li>
+        </ul>
+
+        <p><strong>DDoS防护</strong></p>
+        <ul>
+            <li>高防IP</li>
+            <li>流量清洗</li>
+        </ul>
+
+        <p><strong>SSL证书</strong></p>
+        <ul>
+            <li>HTTPS加密</li>
+            <li>证书管理</li>
+        </ul>
+
+        <h3>7.7 区块链服务</h3>
+        <p><strong>阿里云存证云</strong></p>
+        <ul>
+            <li>数据上链</li>
+            <li>司法存证</li>
+            <li>证据固化</li>
+        </ul>
+
+        <p><strong>司法链</strong></p>
+        <ul>
+            <li>法律效力</li>
+            <li>公信力</li>
+        </ul>
+
+        <h3>7.8 AI服务</h3>
+        <p><strong>通义千问</strong></p>
+        <ul>
+            <li>文本生成</li>
+            <li>对话交互</li>
+            <li>内容理解</li>
+        </ul>
+
+        <p><strong>OCR识别</strong></p>
+        <ul>
+            <li>身份证识别</li>
+            <li>营业执照识别</li>
+            <li>票据识别</li>
+        </ul>
+
+        <p><strong>图像识别</strong></p>
+        <ul>
+            <li>商品识别</li>
+            <li>场景识别</li>
+        </ul>
+
+        <p><strong>语音识别</strong></p>
+        <ul>
+            <li>实时转写</li>
+            <li>录音转文字</li>
+        </ul>
+
+        <h3>7.9 音视频服务</h3>
+        <p><strong>RTC (实时通信)</strong></p>
+        <ul>
+            <li>音视频通话</li>
+            <li>屏幕共享</li>
+            <li>录制回放</li>
+        </ul>
+
+        <p><strong>VOD (视频点播)</strong></p>
+        <ul>
+            <li>视频上传</li>
+            <li>转码</li>
+            <li>播放</li>
+        </ul>
+
+        <h3>7.10 监控服务</h3>
+        <p><strong>ARMS (应用监控)</strong></p>
+        <ul>
+            <li>性能监控</li>
+            <li>链路追踪</li>
+            <li>异常监控</li>
+        </ul>
+
+        <p><strong>SLS (日志服务)</strong></p>
+        <ul>
+            <li>日志采集</li>
+            <li>日志分析</li>
+            <li>告警</li>
+        </ul>
+
+        <p><strong>CloudMonitor (云监控)</strong></p>
+        <ul>
+            <li>资源监控</li>
+            <li>自定义监控</li>
+            <li>告警通知</li>
+        </ul>
+
+        <h2>8. DevOps技术栈</h2>
+
+        <h3>8.1 版本控制</h3>
+        <p><strong>Git</strong></p>
+        <ul>
+            <li>代码管理</li>
+            <li>分支策略: Git Flow</li>
+        </ul>
+
+        <p><strong>GitLab / GitHub</strong></p>
+        <ul>
+            <li>代码托管</li>
+            <li>Code Review</li>
+            <li>CI/CD集成</li>
+        </ul>
+
+        <h3>8.2 CI/CD</h3>
+        <p><strong>Jenkins</strong></p>
+        <ul>
+            <li>持续集成</li>
+            <li>持续部署</li>
+            <li>流水线</li>
+        </ul>
+
+        <p><strong>GitLab CI / GitHub Actions</strong></p>
+        <ul>
+            <li>代码即配置</li>
+            <li>自动化测试</li>
+            <li>自动化部署</li>
+        </ul>
+
+        <p><strong>阿里云云效</strong></p>
+        <ul>
+            <li>一站式DevOps</li>
+            <li>代码管理</li>
+            <li>流水线</li>
+            <li>制品库</li>
+        </ul>
+
+        <h3>8.3 容器化</h3>
+        <p><strong>Docker</strong></p>
+        <ul>
+            <li>应用容器化</li>
+            <li>镜像构建</li>
+            <li>镜像仓库</li>
+        </ul>
+
+        <p><strong>Kubernetes (ACK)</strong></p>
+        <ul>
+            <li>容器编排</li>
+            <li>服务发现</li>
+            <li>自动扩缩容</li>
+            <li>滚动更新</li>
+        </ul>
+
+        <p><strong>Helm</strong></p>
+        <ul>
+            <li>包管理</li>
+            <li>版本管理</li>
+            <li>配置管理</li>
+        </ul>
+
+        <h3>8.4 基础设施即代码</h3>
+        <p><strong>Terraform</strong></p>
+        <ul>
+            <li>云资源管理</li>
+            <li>版本控制</li>
+            <li>自动化部署</li>
+        </ul>
+
+        <p><strong>Ansible</strong></p>
+        <ul>
+            <li>配置管理</li>
+            <li>应用部署</li>
+            <li>任务自动化</li>
+        </ul>
+
+        <h3>8.5 监控告警</h3>
+        <p><strong>Prometheus</strong></p>
+        <ul>
+            <li>指标采集</li>
+            <li>时序数据库</li>
+            <li>告警规则</li>
+        </ul>
+
+        <p><strong>Grafana</strong></p>
+        <ul>
+            <li>可视化</li>
+            <li>仪表盘</li>
+            <li>告警通知</li>
+        </ul>
+
+        <p><strong>ELK Stack</strong></p>
+        <ul>
+            <li>Elasticsearch: 存储</li>
+            <li>Logstash: 采集</li>
+            <li>Kibana: 可视化</li>
+        </ul>
+
+        <h3>8.6 链路追踪</h3>
+        <p><strong>OpenTelemetry</strong></p>
+        <ul>
+            <li>分布式追踪</li>
+            <li>指标采集</li>
+            <li>日志关联</li>
+        </ul>
+
+        <p><strong>Jaeger / Zipkin</strong></p>
+        <ul>
+            <li>链路可视化</li>
+            <li>性能分析</li>
+        </ul>
+
+        <h2>9. 测试技术栈</h2>
+
+        <h3>9.1 单元测试</h3>
+        <p><strong>JUnit 5</strong></p>
+        <ul>
+            <li>Java单元测试</li>
+            <li>参数化测试</li>
+            <li>嵌套测试</li>
+        </ul>
+
+        <p><strong>Mockito</strong></p>
+        <ul>
+            <li>Mock框架</li>
+            <li>依赖隔离</li>
+        </ul>
+
+        <p><strong>Jest</strong></p>
+        <ul>
+            <li>JavaScript测试</li>
+            <li>快照测试</li>
+        </ul>
+
+        <h3>9.2 集成测试</h3>
+        <p><strong>Spring Boot Test</strong></p>
+        <ul>
+            <li>集成测试</li>
+            <li>容器测试</li>
+        </ul>
+
+        <p><strong>Testcontainers</strong></p>
+        <ul>
+            <li>Docker容器测试</li>
+            <li>数据库测试</li>
+        </ul>
+
+        <h3>9.3 接口测试</h3>
+        <p><strong>Postman</strong></p>
+        <ul>
+            <li>手动测试</li>
+            <li>自动化测试</li>
+        </ul>
+
+        <p><strong>JMeter</strong></p>
+        <ul>
+            <li>性能测试</li>
+            <li>压力测试</li>
+        </ul>
+
+        <p><strong>Gatling</strong></p>
+        <ul>
+            <li>高性能压测</li>
+            <li>实时报告</li>
+        </ul>
+
+        <h3>9.4 E2E测试</h3>
+        <p><strong>Cypress</strong></p>
+        <ul>
+            <li>前端E2E</li>
+            <li>可视化调试</li>
+        </ul>
+
+        <p><strong>Selenium</strong></p>
+        <ul>
+            <li>浏览器自动化</li>
+            <li>跨浏览器测试</li>
+        </ul>
+
+        <h3>9.5 代码质量</h3>
+        <p><strong>SonarQube</strong></p>
+        <ul>
+            <li>代码扫描</li>
+            <li>质量门禁</li>
+            <li>技术债务</li>
+        </ul>
+
+        <p><strong>JaCoCo</strong></p>
+        <ul>
+            <li>代码覆盖率</li>
+            <li>测试报告</li>
+        </ul>
+
+        <h2>10. 开发工具</h2>
+
+        <h3>10.1 IDE</h3>
+        <p><strong>IntelliJ IDEA</strong></p>
+        <ul>
+            <li>Java开发</li>
+            <li>插件丰富</li>
+            <li>智能提示</li>
+        </ul>
+
+        <p><strong>VS Code</strong></p>
+        <ul>
+            <li>前端开发</li>
+            <li>轻量级</li>
+            <li>插件丰富</li>
+        </ul>
+
+        <h3>10.2 API工具</h3>
+        <p><strong>Postman</strong></p>
+        <ul>
+            <li>API测试</li>
+            <li>文档生成</li>
+        </ul>
+
+        <p><strong>Apifox</strong></p>
+        <ul>
+            <li>国产工具</li>
+            <li>API设计</li>
+            <li>Mock服务</li>
+        </ul>
+
+        <h3>10.3 数据库工具</h3>
+        <p><strong>DataGrip</strong></p>
+        <ul>
+            <li>多数据库支持</li>
+            <li>SQL编辑器</li>
+            <li>数据导入导出</li>
+        </ul>
+
+        <p><strong>Navicat</strong></p>
+        <ul>
+            <li>可视化管理</li>
+            <li>数据同步</li>
+        </ul>
+
+        <h3>10.4 协作工具</h3>
+        <p><strong>钉钉 / 飞书</strong></p>
+        <ul>
+            <li>即时通讯</li>
+            <li>视频会议</li>
+            <li>文档协作</li>
+        </ul>
+
+        <p><strong>Confluence</strong></p>
+        <ul>
+            <li>知识库</li>
+            <li>文档管理</li>
+        </ul>
+
+        <p><strong>JIRA</strong></p>
+        <ul>
+            <li>项目管理</li>
+            <li>需求跟踪</li>
+            <li>Bug管理</li>
+        </ul>
+
+        <h2>11. 技术选型总结</h2>
+
+        <h3>11.1 核心技术栈</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>层次</th>
+                    <th>技术选型</th>
+                    <th>备选方案</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>开发语言</td>
+                    <td>Java 17</td>
+                    <td>Kotlin</td>
+                </tr>
+                <tr>
+                    <td>后端框架</td>
+                    <td>Spring Boot 3.2 + Spring Cloud Alibaba</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>前端框架</td>
+                    <td>React 18 + Ant Design Pro</td>
+                    <td>Vue 3</td>
+                </tr>
+                <tr>
+                    <td>移动端</td>
+                    <td>React Native</td>
+                    <td>Flutter</td>
+                </tr>
+                <tr>
+                    <td>数据库</td>
+                    <td>MySQL 8.0 + MongoDB 5.0 + Redis 7.2</td>
+                    <td>PostgreSQL</td>
+                </tr>
+                <tr>
+                    <td>消息队列</td>
+                    <td>RocketMQ 5.1</td>
+                    <td>Kafka</td>
+                </tr>
+                <tr>
+                    <td>搜索引擎</td>
+                    <td>Elasticsearch 8.11</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>容器编排</td>
+                    <td>Kubernetes (ACK)</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>云平台</td>
+                    <td>阿里云</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>11.2 技术债务管理</h3>
+        <p><strong>定期评估</strong>:</p>
+        <ul>
+            <li>每季度技术选型回顾</li>
+            <li>新技术调研</li>
+            <li>技术升级计划</li>
+        </ul>
+
+        <p><strong>版本管理</strong>:</p>
+        <ul>
+            <li>依赖版本统一</li>
+            <li>定期升级</li>
+            <li>安全补丁</li>
+        </ul>
+
+        <p><strong>技术培训</strong>:</p>
+        <ul>
+            <li>新技术分享</li>
+            <li>最佳实践</li>
+            <li>代码规范</li>
+        </ul>
+
+        <h3>11.3 技术演进</h3>
+        <p><strong>短期 (6个月)</strong>:</p>
+        <ul>
+            <li>完善微服务架构</li>
+            <li>优化性能</li>
+            <li>提升稳定性</li>
+        </ul>
+
+        <p><strong>中期 (1年)</strong>:</p>
+        <ul>
+            <li>引入服务网格</li>
+            <li>AI能力增强</li>
+            <li>大数据分析</li>
+        </ul>
+
+        <p><strong>长期 (2年)</strong>:</p>
+        <ul>
+            <li>云原生深化</li>
+            <li>智能化升级</li>
+            <li>生态化扩展</li>
+        </ul>
+
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e1e4e8;">
+        <p style="text-align: center; color: #666;">
+            <strong>文档版本</strong>: v1.0<br>
+            <strong>最后更新</strong>: 2024-01-01<br>
+            <strong>文档所有者</strong>: 架构团队
+        </p>
+    </div>
+</body>
+</html>

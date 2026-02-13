@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滚动消息管理 - 系统管理员后台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1890ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --error-color: #ff4d4f;
+            --text-color: rgba(0, 0, 0, 0.85);
+            --text-secondary: rgba(0, 0, 0, 0.45);
+            --border-color: #d9d9d9;
+            --background-color: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+                'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5715;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            z-index: 2000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .action-bar {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #73d13d;
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff7875;
+        }
+
+        .btn-default {
+            background: white;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-default:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .notice-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .notice-item {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .notice-item:last-child {
+            border-bottom: none;
+        }
+
+        .notice-content {
+            flex: 1;
+        }
+
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .notice-type {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .notice-type.system {
+            background: #e6f7ff;
+            color: var(--primary-color);
+        }
+
+        .notice-type.activity {
+            background: #fff7e6;
+            color: var(--warning-color);
+        }
+
+        .notice-type.tip {
+            background: #f6ffed;
+            color: var(--success-color);
+        }
+
+        .notice-status {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+
+        .notice-status.active {
+            background: #f6ffed;
+            color: var(--success-color);
+        }
+
+        .notice-status.inactive {
+            background: #f5f5f5;
+            color: var(--text-secondary);
+        }
+
+        .notice-text {
+            font-size: 15px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .notice-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .notice-actions {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .modal-close:hover {
+            background: #f5f5f5;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-label .required {
+            color: var(--error-color);
+            margin-left: 4px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.25);
+            transition: 0.3s;
+            border-radius: 22px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← 返回首页</a>
+
+    <div class="container">
+        <!-- 页面头部 -->
+        <div class="page-header">
+            <div class="page-title">📢 滚动消息管理</div>
+            <div class="page-desc">管理商城首页的滚动消息公告，支持系统公告、优惠活动、温馨提示等多种类型</div>
+        </div>
+
+        <!-- 操作栏 -->
+        <div class="action-bar">
+            <div>
+                <span style="color: var(--text-secondary);">共 <strong style="color: var(--primary-color);">6</strong> 条消息</span>
+            </div>
+            <button class="btn btn-primary" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> 新建消息
+            </button>
+        </div>
+
+        <!-- 消息列表 -->
+        <div class="notice-list">
+            <!-- 消息项1 -->
+            <div class="notice-item">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type system">系统公告</span>
+                            <span class="notice-status active">已启用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【系统公告】欢迎使用律联品牌商城，正品保障，维权无忧！
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-02-10 10:00</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：1</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-default" onclick="editNotice(1)">
+                        <i class="fas fa-edit"></i> 编辑
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(1)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息项2 -->
+            <div class="notice-item">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type activity">优惠活动</span>
+                            <span class="notice-status active">已启用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【优惠活动】新用户注册即送100积分，全场商品享受积分抵扣！
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-02-10 09:30</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：2</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-default" onclick="editNotice(2)">
+                        <i class="fas fa-edit"></i> 编辑
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(2)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息项3 -->
+            <div class="notice-item">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type tip">温馨提示</span>
+                            <span class="notice-status active">已启用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【温馨提示】购物遇到问题？点击维权投诉，48小时内响应，专业律师团队为您服务！
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-02-10 09:00</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：3</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-default" onclick="editNotice(3)">
+                        <i class="fas fa-edit"></i> 编辑
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(3)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息项4 -->
+            <div class="notice-item">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type system">系统公告</span>
+                            <span class="notice-status active">已启用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【知识产权】商标、专利、著作权交易，正规合同，律师见证，资金托管，快速过户！
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-02-09 16:00</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：4</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-default" onclick="editNotice(4)">
+                        <i class="fas fa-edit"></i> 编辑
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(4)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息项5 - 已停用 -->
+            <div class="notice-item" style="opacity: 0.6;">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type activity">优惠活动</span>
+                            <span class="notice-status inactive">已停用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【春节活动】春节期间全场8折优惠，活动时间：2024年1月20日-2月10日
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-01-20 10:00</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：5</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-success" onclick="enableNotice(5)">
+                        <i class="fas fa-check"></i> 启用
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(5)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+
+            <!-- 消息项6 - 已停用 -->
+            <div class="notice-item" style="opacity: 0.6;">
+                <div class="notice-content">
+                    <div class="notice-header">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span class="notice-type tip">温馨提示</span>
+                            <span class="notice-status inactive">已停用</span>
+                        </div>
+                    </div>
+                    <div class="notice-text">
+                        【系统维护】系统将于2024年2月5日凌晨2:00-4:00进行维护，期间暂停服务
+                    </div>
+                    <div class="notice-meta">
+                        <span><i class="far fa-clock"></i> 创建时间：2024-02-04 15:00</span>
+                        <span><i class="far fa-user"></i> 创建人：系统管理员</span>
+                        <span><i class="fas fa-sort"></i> 排序：6</span>
+                    </div>
+                </div>
+                <div class="notice-actions">
+                    <button class="btn btn-success" onclick="enableNotice(6)">
+                        <i class="fas fa-check"></i> 启用
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteNotice(6)">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建/编辑消息弹窗 -->
+    <div id="noticeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">新建消息</div>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="noticeForm">
+                    <div class="form-group">
+                        <label class="form-label">
+                            消息类型<span class="required">*</span>
+                        </label>
+                        <select class="form-select" id="noticeType" required>
+                            <option value="">请选择消息类型</option>
+                            <option value="system">系统公告</option>
+                            <option value="activity">优惠活动</option>
+                            <option value="tip">温馨提示</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            消息内容<span class="required">*</span>
+                        </label>
+                        <textarea class="form-textarea" id="noticeContent" placeholder="请输入消息内容，建议50字以内" required></textarea>
+                        <div class="form-help">消息将在商城首页滚动显示，建议简洁明了</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            排序<span class="required">*</span>
+                        </label>
+                        <input type="number" class="form-input" id="noticeSort" placeholder="数字越小越靠前" value="1" min="1" required>
+                        <div class="form-help">数字越小，消息显示越靠前</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            状态
+                        </label>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <label class="switch">
+                                <input type="checkbox" id="noticeStatus" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span id="statusText">已启用</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveNotice()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 打开新建消息弹窗
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '新建消息';
+            document.getElementById('noticeForm').reset();
+            document.getElementById('noticeStatus').checked = true;
+            document.getElementById('statusText').textContent = '已启用';
+            document.getElementById('noticeModal').classList.add('active');
+        }
+
+        // 编辑消息
+        function editNotice(id) {
+            document.getElementById('modalTitle').textContent = '编辑消息';
+            // 这里应该加载消息数据
+            document.getElementById('noticeModal').classList.add('active');
+            alert('编辑消息 ID: ' + id);
+        }
+
+        // 删除消息
+        function deleteNotice(id) {
+            if (confirm('确定要删除这条消息吗？')) {
+                alert('删除消息 ID: ' + id);
+                // 这里应该调用删除接口
+            }
+        }
+
+        // 启用消息
+        function enableNotice(id) {
+            alert('启用消息 ID: ' + id);
+            // 这里应该调用启用接口
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('noticeModal').classList.remove('active');
+        }
+
+        // 保存消息
+        function saveNotice() {
+            const form = document.getElementById('noticeForm');
+            if (form.checkValidity()) {
+                const data = {
+                    type: document.getElementById('noticeType').value,
+                    content: document.getElementById('noticeContent').value,
+                    sort: document.getElementById('noticeSort').value,
+                    status: document.getElementById('noticeStatus').checked ? 1 : 0
+                };
+                console.log('保存消息:', data);
+                alert('保存成功！');
+                closeModal();
+                // 这里应该调用保存接口
+            } else {
+                alert('请填写完整信息');
+            }
+        }
+
+        // 状态开关切换
+        document.getElementById('noticeStatus').addEventListener('change', function() {
+            document.getElementById('statusText').textContent = this.checked ? '已启用' : '已停用';
+        });
+
+        // 点击弹窗外部关闭
+        document.getElementById('noticeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
